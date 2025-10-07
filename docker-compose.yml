@@ -14,7 +14,7 @@ services:
   # Prometheus container
   prometheus:
     image: prom/prometheus:v3.6.0
-    container_name: grafana
+    container_name: prometheus
     expose:
       - 9090
     volumes:
@@ -23,6 +23,19 @@ services:
     networks:
       internal_network:
         ipv4_address: 172.16.238.20
+
+  # NGINX container
+  nginx:
+    image: nginx:1.29
+    container_name: nginx
+    ports:
+      - 80:80
+    volumes:
+      - nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      internal_network:
+        ipv4_address: 172.16.238.30
+    
 
 volumes:
   grafana_data:
