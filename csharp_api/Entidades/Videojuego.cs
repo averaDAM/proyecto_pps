@@ -25,7 +25,7 @@ namespace ApiVideojuegos.Entidades
         public int AñoLanzamiento { get; set; }
 
         [Range(1, 1000)] // Horas de juego estimadas
-        public int HorasJuego { get; set; }
+        public int HorasJuego { get; set; } //comentario
 
         [Range(0.0, 10.0)] // Puntuación del 0 al 10
         public double Puntuacion { get; set; }
