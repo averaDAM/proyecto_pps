@@ -5,6 +5,9 @@ services:
     container_name: grafana
     expose:
       - 3000
+    environment:
+      - GF_SERVER_DOMAIN=localhost
+      - GF_SERVER_ROOT_URL=http://localhost:80/grafana
     volumes:
       - grafana_data:/var/lib/grafana:rw
     networks:
@@ -18,23 +21,29 @@ services:
     expose:
       - 9090
     volumes:
-      - prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus:rw
     networks:
       internal_network:
         ipv4_address: 172.16.238.20
 
-  # NGINX container
+  # NGINX container and metrics exporter
   nginx:
     image: nginx:1.29
     container_name: nginx
     ports:
       - 80:80
     volumes:
-      - nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       internal_network:
         ipv4_address: 172.16.238.30
+
+  nginx_metrics;:
+    image: nginx/nginx-prometheus-exporter:1.5.0
+    container_name: nginx_metrics
+    expose:
+      - 9113
     
 
 volumes:
