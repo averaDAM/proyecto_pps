@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Api PPS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72b9c306228b0e2e9f8f846a35b81df2bb5f6f0b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4a3a5dc8f6a1419710892ca4da089f95beb08212")]
 [assembly: System.Reflection.AssemblyProductAttribute("Api PPS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Api PPS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
