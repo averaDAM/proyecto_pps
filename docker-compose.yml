@@ -1,8 +1,9 @@
 services:
   # Grafana container
   grafana:
-    image: grafana/grafana:main-ubuntu
+    image: grafana/grafana:12.3.0-18329792253-ubuntu
     container_name: grafana
+    restart: always
     expose:
       - 3000
     environment:
@@ -31,6 +32,7 @@ services:
   nginx:
     image: nginx:1.29
     container_name: nginx
+    restart: always
     ports:
       - 80:80
       - 8080:8080 # For metrics extraction
@@ -49,9 +51,24 @@ services:
       internal_network:
         ipv4_address: 172.16.238.40
 
+  # Database container (PostgreSQL)
+  postgresql:
+    image: postgres:18
+    container_name: postgresql
+    restart: always
+    shm_size: 128mb # Shared memory cap (recommended by docs)
+    expose:
+      - 5432
+    volumes:
+      - postgresql_data:/var/lib/postgresql
+    networks:
+      internal_network:
+      ipv4_address: 172.16.238.50
+
 volumes:
   grafana_data:
   prometheus_data:
+  postgresql_data:
 
 networks:
   internal_network:
