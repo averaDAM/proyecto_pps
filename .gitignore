@@ -210,5 +210,4 @@ __marimo__/
 /.vs/CopilotSnapshots/7C06CD0587D1D34E9416AF9128B192AF
 /.vs/proyecto_pps
 *.sqlite
-*.json
 *.sqlite-journal
