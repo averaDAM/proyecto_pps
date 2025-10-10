@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ApiVideojuegos.Entidades;
-using ApiVideojuegos.Servicios;
+using Api_PPS;
 
-namespace ApiVideojuegos.Controllers
+namespace Api_PPS
 {
     // CRUD de videojuegos
     // Create, Read, Update, Delete
@@ -21,20 +20,20 @@ namespace ApiVideojuegos.Controllers
             this.logger = logger;
         }
 
-        const int TamañoPagina = 5;
+    const int TamanioPagina = 5;
 
         // Obtener todos los videojuegos
         [HttpGet]
         public async Task<ActionResult<List<Videojuego>>> Get([FromQuery] string? genero,
                                  [FromQuery] string? nombre,
                                  [FromQuery] int numeroPagina = 1,
-                                 [FromQuery] int tamañoPagina = TamañoPagina)
+                                 [FromQuery] int tamanioPagina = TamanioPagina)
         {
-            logger.LogInformation("Obteniendo todos los videojuegos con filtros - Género: {Genero}, Nombre: {Nombre}", genero, nombre);
+            logger.LogInformation("Obteniendo todos los videojuegos con filtros - Gï¿½nero: {Genero}, Nombre: {Nombre}", genero, nombre);
 
-            var (videojuegos, totalRegistros) = await gestionVideojuegos.ObtenerTodosFiltrado(genero, nombre, numeroPagina, tamañoPagina);
+            var (videojuegos, totalRegistros) = await gestionVideojuegos.ObtenerTodosFiltrado(genero, nombre, numeroPagina, tamanioPagina);
 
-            logger.LogInformation("Obteniendo todos los videojuegos. Número de videojuegos: {TotalRegistros}", totalRegistros);
+            logger.LogInformation("Obteniendo todos los videojuegos. Nï¿½mero de videojuegos: {TotalRegistros}", totalRegistros);
             return Ok(new { videojuegos, totalRegistros });
         }
 
@@ -64,7 +63,7 @@ namespace ApiVideojuegos.Controllers
 
             if (!modeloValido)
             {
-                logger.LogWarning("Modelo de videojuego no válido para: {Nombre}", videojuego.Nombre);
+                logger.LogWarning("Modelo de videojuego no vï¿½lido para: {Nombre}", videojuego.Nombre);
                 return BadRequest(ModelState);
             }
 
@@ -84,14 +83,14 @@ namespace ApiVideojuegos.Controllers
             var videojuegoActual = await gestionVideojuegos.ObtenerPorId(id);
             if (videojuegoActual == null)
             {
-                logger.LogError("No se encontró el videojuego con id {Id} para actualizar", id);
+                logger.LogError("No se encontrï¿½ el videojuego con id {Id} para actualizar", id);
                 return NotFound();
             }
 
             videojuegoActual.Nombre = videojuego.Nombre;
             videojuegoActual.Desarrollador = videojuego.Desarrollador;
             videojuegoActual.Genero = videojuego.Genero;
-            videojuegoActual.AñoLanzamiento = videojuego.AñoLanzamiento;
+            videojuegoActual.AnioLanzamiento = videojuego.AnioLanzamiento;
             videojuegoActual.HorasJuego = videojuego.HorasJuego;
             videojuegoActual.Puntuacion = videojuego.Puntuacion;
             videojuegoActual.FechaLanzamiento = videojuego.FechaLanzamiento;
@@ -113,7 +112,7 @@ namespace ApiVideojuegos.Controllers
             var videojuego = await gestionVideojuegos.ObtenerPorId(id);
             if (videojuego == null)
             {
-                logger.LogError("No se encontró el videojuego con id {Id} para eliminar", id);
+                logger.LogError("No se encontrï¿½ el videojuego con id {Id} para eliminar", id);
                 return NotFound();
             }
 

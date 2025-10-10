@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection.Emit;
-using ApiVideojuegos.Entidades;
+using Api_PPS;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApiVideojuegos.Contexto
+namespace Api_PPS
 {
     public class ContextoApi : DbContext
     {
@@ -26,7 +26,7 @@ namespace ApiVideojuegos.Contexto
                 entity.HasIndex(v => v.Nombre);
                 entity.HasIndex(v => v.Genero);
                 entity.HasIndex(v => v.Desarrollador);
-                entity.HasIndex(v => v.AñoLanzamiento);
+                entity.HasIndex(v => v.AnioLanzamiento);
             });
         }
     }

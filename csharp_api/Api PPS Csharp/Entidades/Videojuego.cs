@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ApiVideojuegos.Entidades
+namespace Api_PPS
 {
     // Sistemas de validación utilizados en esta clase:
     // 1-Atributos de validación de datos de DataAnnotations
@@ -22,7 +22,7 @@ namespace ApiVideojuegos.Entidades
         public string? Genero { get; set; }
 
         [Range(1970, 2030)] // Primeros videojuegos comerciales en los 70
-        public int AñoLanzamiento { get; set; }
+    public int AnioLanzamiento { get; set; }
 
         [Range(1, 1000)] // Horas de juego estimadas
         public int HorasJuego { get; set; }
@@ -48,9 +48,9 @@ namespace ApiVideojuegos.Entidades
             }
 
             // Validar que el año de lanzamiento sea consistente con la fecha de lanzamiento
-            if (AñoLanzamiento != FechaLanzamiento.Year)
+            if (AnioLanzamiento != FechaLanzamiento.Year)
             {
-                yield return new ValidationResult("El año de lanzamiento debe coincidir con el año de la fecha de lanzamiento", new[] { nameof(AñoLanzamiento), nameof(FechaLanzamiento) });
+                yield return new ValidationResult("El año de lanzamiento debe coincidir con el año de la fecha de lanzamiento", new[] { nameof(AnioLanzamiento), nameof(FechaLanzamiento) });
             }
         }
     }

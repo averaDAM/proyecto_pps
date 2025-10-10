@@ -1,8 +1,7 @@
-﻿using ApiVideojuegos.Contexto;
-using ApiVideojuegos.Entidades;
+﻿using Api_PPS;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApiVideojuegos.Servicios
+namespace Api_PPS
 {
     public class GestionVideojuegosBBDD : IGestionVideojuegos
     {

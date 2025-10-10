@@ -1,6 +1,6 @@
-﻿using ApiVideojuegos.Entidades;
+﻿using Api_PPS;
 
-namespace ApiVideojuegos.Servicios
+namespace Api_PPS
 {
     public interface IGestionVideojuegos
     {
