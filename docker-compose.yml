@@ -1,8 +1,9 @@
 services:
   # Grafana container
   grafana:
-    image: grafana/grafana:main-ubuntu
+    image: grafana/grafana:12.3.0-18329792253-ubuntu
     container_name: grafana
+    restart: always
     expose:
       - 3000
     environment:
@@ -21,7 +22,7 @@ services:
     expose:
       - 9090
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus:rw
     networks:
       internal_network:
@@ -31,9 +32,11 @@ services:
   nginx:
     image: nginx:1.29
     container_name: nginx
+    restart: always
     ports:
       - 80:80
-      - 8080:8080 # For metrics extraction
+    expose:
+      - 8080 # For metrics extraction
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
@@ -49,9 +52,29 @@ services:
       internal_network:
         ipv4_address: 172.16.238.40
 
+  # Database container (PostgreSQL)
+  postgresql:
+    image: postgres:18
+    container_name: postgresql
+    restart: always
+    shm_size: 128mb # Shared memory cap (recommended by docs)
+    expose:
+      - 5432
+    volumes:
+      - postgresql_data:/var/lib/postgresql
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=default
+      - POSTGRES_HOST_AUTH_METHOD=scram-sha-256
+    networks:
+      internal_network:
+        ipv4_address: 172.16.238.50
+
 volumes:
   grafana_data:
   prometheus_data:
+  postgresql_data:
 
 networks:
   internal_network:
