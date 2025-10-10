@@ -11,6 +11,9 @@ services:
       - GF_SERVER_ROOT_URL=http://localhost:80/grafana
     volumes:
       - grafana_data:/var/lib/grafana:rw
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/config.yaml:/etc/grafana/provisioning/dashboards/config.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     networks:
       internal_network:
         ipv4_address: 172.16.238.10
