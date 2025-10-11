@@ -13,7 +13,7 @@ providers:
       foldersFromFilesStructure: true
   
   - name: "postgresql_metrics"
-    orgId: 2
+    orgId: 1
     folder: "PostgreSQL"
     type: file
     disableDeletion: true
