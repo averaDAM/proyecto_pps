@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -102,7 +102,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18320792904",
+      "pluginVersion": "12.3.0-18329792253",
       "targets": [
         {
           "datasource": {
@@ -110,7 +110,7 @@
             "uid": "ff0ft5lb5qf40e"
           },
           "editorMode": "builder",
-          "expr": "promhttp_metric_handler_requests_total",
+          "expr": "sum by(code) (promhttp_metric_handler_requests_total)",
           "legendFormat": "{{code}}",
           "range": true,
           "refId": "A"
@@ -172,7 +172,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18320792904",
+      "pluginVersion": "12.3.0-18329792253",
       "targets": [
         {
           "editorMode": "builder",
@@ -201,5 +201,5 @@
   "timezone": "browser",
   "title": "NGINX",
   "uid": "addvbl8",
-  "version": 6
+  "version": 2
 }

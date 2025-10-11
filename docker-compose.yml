@@ -11,6 +11,9 @@ services:
       - GF_SERVER_ROOT_URL=http://localhost:80/grafana
     volumes:
       - grafana_data:/var/lib/grafana:rw
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/config.yaml:/etc/grafana/provisioning/dashboards/config.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     networks:
       internal_network:
         ipv4_address: 172.16.238.10
@@ -52,9 +55,9 @@ services:
       internal_network:
         ipv4_address: 172.16.238.40
 
-  # Database container (PostgreSQL)
+  # Database and metrics container (PostgreSQL)
   postgresql:
-    image: postgres:18
+    image: postgres:17
     container_name: postgresql
     restart: always
     shm_size: 128mb # Shared memory cap (recommended by docs)
@@ -70,6 +73,20 @@ services:
     networks:
       internal_network:
         ipv4_address: 172.16.238.50
+  
+  postgresql_metrics:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
+    container_name: postgresql_metrics
+    restart: always
+    expose:
+      - 9187
+    environment:
+      - DATA_SOURCE_URI=postgresql:5432/postgres?sslmode=disable
+      - DATA_SOURCE_USER=${POSTGRES_USER}
+      - DATA_SOURCE_PASS=${POSTGRES_PASSWORD}
+    networks:
+      internal_network:
+        ipv4_address: 172.16.238.60
 
 volumes:
   grafana_data:
