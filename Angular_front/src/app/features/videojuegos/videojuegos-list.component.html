@@ -1,0 +1,50 @@
+<div class="wrap">
+    <h1>Tienda de Videojuegos</h1>
+  
+    <form (ngSubmit)="buscar()" class="filters">
+      <input type="text" placeholder="Buscar por nombre"
+             [ngModel]="nombre()" (ngModelChange)="nombre.set($event)" name="nombre" />
+      <input type="text" placeholder="Filtrar por género"
+             [ngModel]="genero()" (ngModelChange)="genero.set($event)" name="genero" />
+      <button type="submit">Buscar</button>
+      <button type="button" (click)="limpiar()">Limpiar</button>
+    </form>
+  
+    <div *ngIf="cargando()" class="info">Cargando…</div>
+    <div *ngIf="error()" class="error">Error: {{ error() }}</div>
+  
+    <table *ngIf="!cargando() && !error()" class="grid">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Género</th>
+          <th>Desarrollador</th>
+          <th>Año</th>
+          <th>Puntuación</th>
+          <th>Horas</th>
+          <th>Lanzamiento</th>
+          <th>Fin soporte</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of videojuegos()">
+          <td>{{ v.nombre }}</td>
+          <td>{{ v.genero || '—' }}</td>
+          <td>{{ v.desarrollador || '—' }}</td>
+          <td>{{ v.anioLanzamiento }}</td>
+          <td>{{ v.puntuacion }}</td>
+          <td>{{ v.horasJuego }}</td>
+          <td>{{ fFecha(v.fechaLanzamiento) }}</td>
+          <td>{{ fFecha(v.fechaFinSoporte) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div class="pager" *ngIf="total() > 0">
+      <button (click)="prev()" [disabled]="pagina() === 1">Anterior</button>
+      <span>Página {{ pagina() }} / {{ paginasTotales() }}</span>
+      <button (click)="next()" [disabled]="pagina() === paginasTotales()">Siguiente</button>
+      <span class="total">Total: {{ total() }}</span>
+    </div>
+  </div>
+  
