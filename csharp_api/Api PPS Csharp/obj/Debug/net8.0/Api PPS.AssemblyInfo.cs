@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Api PPS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93b62aeed71934115efdd55894068bf9633ea6e7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5193fb7a73c69c854dc398bda9f8db7242929434")]
 [assembly: System.Reflection.AssemblyProductAttribute("Api PPS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Api PPS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
