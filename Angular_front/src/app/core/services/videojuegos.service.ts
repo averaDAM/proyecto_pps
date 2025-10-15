@@ -19,7 +19,6 @@ export class VideojuegosService {
     if (opts.genero) params = params.set('genero', opts.genero);
     if (opts.nombre) params = params.set('nombre', opts.nombre);
 
-    const baseUrl = isPlatformServer(this.platformId) ? 'http://nginx/api' : environment.apiBaseUrl;
-    return this.http.get<PagedVideojuegos>(`${baseUrl}/videojuegos`, { params });
+    return this.http.get<PagedVideojuegos>(`${this.baseUrl}/videojuegos`, { params });
   }
 }

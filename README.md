@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Proyecto PPS - Docker
 
 ## Servicios
@@ -21,7 +20,7 @@ POSTGRES_PASSWORD=postgres
 2) Construye y levanta los servicios:
 
 ```
-docker compose up -d --build
+docker compose up -d
 ```
 
 3) Acceso
@@ -34,8 +33,8 @@ Notas:
 
 - El API usa la cadena `ConnectionStrings__ApiVideojuegos` y desactiva la redirección HTTPS en contenedor via `DISABLE_HTTPS_REDIRECT=true`.
 - CORS permitido por defecto: `http://localhost,http://localhost:4200`. Ajusta `CORS_ALLOWED_ORIGINS` si necesitas más orígenes.
-=======
-# MUltiple Services - Project
 
-This repository contains a list of multiple services, 
->>>>>>> main
+4) Imagenes
+Imagenes publicadas en Docker Hub:
+- [APP](https://hub.docker.com/repository/docker/avera123/app-pps/general)
+- [API](https://hub.docker.com/repository/docker/avera123/api-pps/general)
