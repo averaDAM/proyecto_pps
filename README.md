@@ -25,7 +25,7 @@ docker compose up -d
 
 3) Acceso
 
-- Frontend: `http://localhost/app/`
+- Frontend: `http://localhost`
 - API (proxied): `http://localhost/api/` (por ejemplo `http://localhost/api/api/videojuegos`)
 - Grafana: `http://localhost/grafana/`
 
