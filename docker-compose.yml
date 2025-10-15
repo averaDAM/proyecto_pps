@@ -88,6 +88,28 @@ services:
       internal_network:
         ipv4_address: 172.16.238.60
 
+  # API
+  api:
+    build: "./csharp_api/Api PPS Csharp/"
+    container_name: api
+    restart: always
+    expose:
+      - 
+    networks:
+      internal_network:
+        ipv4_address: 172.16.238.70
+
+  # APP
+  app:
+    build: ./Angular_front/
+    container_name: app
+    restart: always
+    expose:
+      - 4000
+    networks:
+      internal_network:
+        ipv4_address: 172.16.238.80
+
 volumes:
   grafana_data:
   prometheus_data:
