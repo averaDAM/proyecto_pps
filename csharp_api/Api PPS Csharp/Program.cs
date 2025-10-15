@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Api_PPS;
+using System;
 
 
 
@@ -15,12 +16,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var corsPolicyName = "AllowAngular";
+var corsOriginsEnv = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS");
+var corsOrigins = !string.IsNullOrWhiteSpace(corsOriginsEnv)
+    ? corsOriginsEnv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    : new[] { "http://localhost", "http://localhost:4200" };
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: corsPolicyName,
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200")
+            policy.WithOrigins(corsOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -41,7 +47,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ContextoApi>();
-    db.Database.Migrate();
+    var pending = await db.Database.GetPendingMigrationsAsync();
+    if (pending.Any())
+    {
+        await db.Database.MigrateAsync();
+    }
+    else
+    {
+        await db.Database.EnsureCreatedAsync();
+    }
 
     if (!db.Videojuegos.Any())
     {
@@ -76,8 +90,9 @@ using (var scope = app.Services.CreateScope())
 
             foreach (var (nombre, desarrollador, genero, anio, horas, puntuacion) in videojuegosData)
             {
-                var fechaLanzamiento = new DateTime(anio, random.Next(1, 13), random.Next(1, 28));
-                var fechaFinSoporte = fechaLanzamiento.AddYears(random.Next(2, 8));
+                var fechaLanzamientoBase = new DateTime(anio, random.Next(1, 13), random.Next(1, 28));
+                var fechaLanzamiento = DateTime.SpecifyKind(fechaLanzamientoBase, DateTimeKind.Utc);
+                var fechaFinSoporte = DateTime.SpecifyKind(fechaLanzamiento.AddYears(random.Next(2, 8)), DateTimeKind.Utc);
 
                 var videojuego = new Videojuego
                 {
@@ -103,8 +118,8 @@ using (var scope = app.Services.CreateScope())
             Console.WriteLine($"Error general obteniendo videojuegos: {ex.Message}");
             var videojuegosRespaldo = new List<Videojuego>
             {
-                new() { Nombre = "The Legend of Zelda: Ocarina of Time", Desarrollador = "Nintendo", Genero = "Aventura", AnioLanzamiento = 1998, HorasJuego = 40, Puntuacion = 9.8, FechaLanzamiento = new DateTime(1998, 11, 21), FechaFinSoporte = new DateTime(2005, 11, 21) },
-                new() { Nombre = "Super Mario Bros.", Desarrollador = "Nintendo", Genero = "Plataformas", AnioLanzamiento = 1985, HorasJuego = 10, Puntuacion = 9.4, FechaLanzamiento = new DateTime(1985, 9, 13), FechaFinSoporte = new DateTime(1992, 9, 13) }
+                new() { Nombre = "The Legend of Zelda: Ocarina of Time", Desarrollador = "Nintendo", Genero = "Aventura", AnioLanzamiento = 1998, HorasJuego = 40, Puntuacion = 9.8, FechaLanzamiento = DateTime.SpecifyKind(new DateTime(1998, 11, 21), DateTimeKind.Utc), FechaFinSoporte = DateTime.SpecifyKind(new DateTime(2005, 11, 21), DateTimeKind.Utc) },
+                new() { Nombre = "Super Mario Bros.", Desarrollador = "Nintendo", Genero = "Plataformas", AnioLanzamiento = 1985, HorasJuego = 10, Puntuacion = 9.4, FechaLanzamiento = DateTime.SpecifyKind(new DateTime(1985, 9, 13), DateTimeKind.Utc), FechaFinSoporte = DateTime.SpecifyKind(new DateTime(1992, 9, 13), DateTimeKind.Utc) }
             };
             db.Videojuegos.AddRange(videojuegosRespaldo);
             await db.SaveChangesAsync();
@@ -118,8 +133,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+var disableHttpsRedirect = string.Equals(Environment.GetEnvironmentVariable("DISABLE_HTTPS_REDIRECT"), "true", StringComparison.OrdinalIgnoreCase);
+if (!disableHttpsRedirect)
+{
+    app.UseHttpsRedirection();
+}
 app.UseCors(corsPolicyName);
 app.UseAuthorization();
 app.MapControllers();
+app.MapGet("/healthz", () => Results.Ok("ok"));
 app.Run();

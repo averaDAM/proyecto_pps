@@ -27,6 +27,8 @@ namespace Api_PPS
                 entity.HasIndex(v => v.Genero);
                 entity.HasIndex(v => v.Desarrollador);
                 entity.HasIndex(v => v.AnioLanzamiento);
+
+                // Usar el mapeo por defecto de Npgsql (timestamptz) para DateTime (UTC)
             });
         }
     }
