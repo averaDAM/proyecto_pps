@@ -65,11 +65,12 @@ services:
       - 5432
     volumes:
       - postgresql_data:/var/lib/postgresql
+      - ./postgresql/pg_hba.conf:/etc/postgresql/pg_hba.conf
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_DB=default
       - POSTGRES_HOST_AUTH_METHOD=scram-sha-256
+    command: ["postgres", "-c", "hba_file=/etc/postgresql/pg_hba.conf",]
     networks:
       internal_network:
         ipv4_address: 172.16.238.50
@@ -78,6 +79,8 @@ services:
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
     container_name: postgresql_metrics
     restart: always
+    depends_on:
+      - postgresql
     expose:
       - 9187
     environment:
@@ -88,22 +91,22 @@ services:
       internal_network:
         ipv4_address: 172.16.238.60
 
-# ASP.NET Core API
+  # ASP.NET Core API
   api:
-    build: "./csharp_api/Api PPS Csharp"
+    image: avera123/api-pps:1.0.0
     container_name: api
     restart: always
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - DISABLE_HTTPS_REDIRECT=true
-      - ConnectionStrings__ApiVideojuegos=Host=postgresql;Port=5432;Database=default;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-      - CORS_ALLOWED_ORIGINS=http://172.16.238.80:4000
+      - ConnectionStrings__ApiVideojuegos=Host=postgresql;Port=5432;Database=postgresql;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};SSL Mode=Disable
+      - CORS_ALLOWED_ORIGINS=http://localhost
     depends_on:
       - postgresql
     expose:
       - 8080
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://172.16.238.70:8080/healthz || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 5
@@ -113,7 +116,7 @@ services:
 
   # Angular SSR frontend
   frontend:
-    build: ./Angular_front
+    image: avera123/app-pps:1.0.0
     container_name: frontend
     restart: always
     environment:
