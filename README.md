@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Proyecto PPS - Docker
 
 ## Servicios
@@ -33,3 +34,8 @@ Notas:
 
 - El API usa la cadena `ConnectionStrings__ApiVideojuegos` y desactiva la redirección HTTPS en contenedor via `DISABLE_HTTPS_REDIRECT=true`.
 - CORS permitido por defecto: `http://localhost,http://localhost:4200`. Ajusta `CORS_ALLOWED_ORIGINS` si necesitas más orígenes.
+=======
+# MUltiple Services - Project
+
+This repository contains a list of multiple services, 
+>>>>>>> main
