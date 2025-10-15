@@ -46,48 +46,6 @@ services:
       internal_network:
         ipv4_address: 172.16.238.30
 
-  # ASP.NET Core API
-  api:
-    build:
-      context: ./csharp_api/Api PPS Csharp
-      dockerfile: Dockerfile
-    container_name: api
-    restart: always
-    environment:
-      - ASPNETCORE_URLS=http://+:8080
-      - DISABLE_HTTPS_REDIRECT=true
-      - ConnectionStrings__ApiVideojuegos=Host=postgresql;Port=5432;Database=default;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-      - CORS_ALLOWED_ORIGINS=http://localhost,http://localhost:4200
-    depends_on:
-      - postgresql
-    expose:
-      - 8080
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    networks:
-      internal_network:
-        ipv4_address: 172.16.238.70
-
-  # Angular SSR frontend
-  frontend:
-    build:
-      context: ./Angular_front
-      dockerfile: Dockerfile
-    container_name: frontend
-    restart: always
-    environment:
-      - PORT=4000
-    depends_on:
-      - api
-    expose:
-      - 4000
-    networks:
-      internal_network:
-        ipv4_address: 172.16.238.80
-
   nginx_metrics:
     image: nginx/nginx-prometheus-exporter:1.5.0
     container_name: nginx_metrics
@@ -129,6 +87,44 @@ services:
     networks:
       internal_network:
         ipv4_address: 172.16.238.60
+
+# ASP.NET Core API
+  api:
+    build: "./csharp_api/Api PPS Csharp"
+    container_name: api
+    restart: always
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - DISABLE_HTTPS_REDIRECT=true
+      - ConnectionStrings__ApiVideojuegos=Host=postgresql;Port=5432;Database=default;Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      - CORS_ALLOWED_ORIGINS=http://172.16.238.80:4000
+    depends_on:
+      - postgresql
+    expose:
+      - 8080
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      internal_network:
+        ipv4_address: 172.16.238.70
+
+  # Angular SSR frontend
+  frontend:
+    build: ./Angular_front
+    container_name: frontend
+    restart: always
+    environment:
+      - PORT=4000
+    depends_on:
+      - api
+    expose:
+      - 4000
+    networks:
+      internal_network:
+        ipv4_address: 172.16.238.80
 
 volumes:
   grafana_data:
